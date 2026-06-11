@@ -110,9 +110,100 @@ right join
 on
     a.DEPT_CODE = b.DEPT_ID;
 
+-- ==============
+-- cross join(카테시안 곱, 곱집합)
+-- 모든 경의 수를 처리 (왼쪽 테이블(22 행)과 오른쪽 테이블(12 행)이 연결 될 수 있는 모든 경우의 수(264 행))
 
-git init
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/SKN-33-Homin/03_DB.git
-git push -u origin main
+select
+    count(*)
+from
+    tbl_menu;
+
+select
+    count(*)
+from
+    tbl_category;
+
+
+select
+    count(*)
+from
+    tbl_menu a
+cross join
+    tbl_category b;
+
+# self join: 하나의 테이블 내부에서 한 행이 다른 행을 참조해서 같은 테이블 내에서 조인
+
+select
+    c.category_name,
+    c.category_code,
+    p.category_name
+from
+    tbl_category c
+join
+    tbl_category p
+on
+    p.category_code = c.ref_category_code
+where
+    p.category_name = '식사';
+
+-- =================================
+-- multiple join : 3개 이상 join, 순서가 중요, (a - b - c) -> ((a - b) - c), 느림
+
+select
+    *
+from
+    tbl_order;
+
+select
+    *
+from
+    tbl_order_menu;
+
+select
+    *
+from
+    tbl_menu;
+
+select
+    *
+from
+    tbl_order o
+join
+    tbl_order_menu om
+on
+o.order_code = om.order_code # a - b - c -> (a - b)완료 - c 예정
+join
+    tbl_menu m
+on
+    m.menu_code = om.menu_code;
+
+
+select
+    *
+from
+    employee;
+
+select
+    *
+from
+    department;
+
+select
+    *
+from
+    location;
+
+select
+    *
+from
+    employee e
+join
+    department d
+on
+    e.DEPT_CODE = d.DEPT_ID
+join
+    location l
+on
+    d.LOCATION_ID = l.LOCAL_CODE
+
